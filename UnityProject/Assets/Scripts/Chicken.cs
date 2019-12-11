@@ -8,7 +8,7 @@ public class Chicken : MonoBehaviour
     // 修飾詞 欄位類型 欄位名稱 (指定 值) 結束
     // 私人 - 隱藏 private (預設)
     // 公開 - 顯示 public 
-    [Header("移動速度")][Range(1, 100)]
+    [Header("移動速度")][Range(1, 2000)]
     public int speed = 10;             // 整數 1, 9999, -100
     [Header("旋轉速度"), Tooltip("G8雞的旋轉速度"), Range(1.5f, 200f)]
     public float turn = 20.5f;         // 浮點數
@@ -18,13 +18,28 @@ public class Chicken : MonoBehaviour
     public string _name = "G8雞";      // 字串 ""
     #endregion
 
+
+    public Transform tran;
+    public Rigidbody rig;
+    public Animator ani;
+
+    private void Update()
+    {
+        Turn();
+        Run();
+        Bark();
+        Catch();
+    }
+
+
     #region 方法區域
-    /// <summary>
+    /// <summary>w
     /// 跑步
     /// </summary>
     private void Run()
     {
-        
+        float v = Input.GetAxis("Vertical");
+        rig.AddForce(tran.forward * speed * v * Time.deltaTime);
     }
 
     /// <summary>
@@ -32,19 +47,20 @@ public class Chicken : MonoBehaviour
     /// </summary>
     private void Turn()
     {
-
+        float h = Input.GetAxis("Horizontal");
+        tran.Rotate(0,turn * h * Time.deltaTime, 0);
     }
 
     /// <summary>
-    /// 亂叫
+    /// 空白鍵拍翅膀
     /// </summary>
-    private void Bark()
+    private void Bark()  
     {
 
     }
 
     /// <summary>
-    /// 撿東西
+    /// 左鍵撿東西
     /// </summary>
     private void Catch()
     {
