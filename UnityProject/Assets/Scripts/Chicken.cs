@@ -22,7 +22,9 @@ public class Chicken : MonoBehaviour
     public Transform tran;
     public Rigidbody rig;
     public Animator ani;
+    public AudioSource aud;
 
+    public AudioClip soundBark;
     private void Update()
     {
         Turn();
@@ -38,8 +40,12 @@ public class Chicken : MonoBehaviour
     /// </summary>
     private void Run()
     {
+        if (ani.GetCurrentAnimatorStateInfo(0).IsName("撿東西")) return;
+
         float v = Input.GetAxis("Vertical");
         rig.AddForce(tran.forward * speed * v * Time.deltaTime);
+
+        ani.SetBool("走路開關", v != 0);
     }
 
     /// <summary>
@@ -56,7 +62,12 @@ public class Chicken : MonoBehaviour
     /// </summary>
     private void Bark()  
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            ani.SetTrigger("拍翅膀觸發器");
 
+            aud.PlayOneShot(soundBark, 0.6f);
+        }
     }
 
     /// <summary>
@@ -64,7 +75,10 @@ public class Chicken : MonoBehaviour
     /// </summary>
     private void Catch()
     {
-
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            ani.SetTrigger("撿東西觸發器");
+        }
     }
 
     /// <summary>
