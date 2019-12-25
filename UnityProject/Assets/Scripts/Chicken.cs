@@ -18,6 +18,7 @@ public class Chicken : MonoBehaviour
     public string _name = "G8雞";      // 字串 ""
     #endregion
 
+    
 
     public Transform tran;
     public Rigidbody rig;
@@ -25,6 +26,10 @@ public class Chicken : MonoBehaviour
     public AudioSource aud;
 
     public AudioClip soundBark;
+
+    [Header("檢物品位置")]
+    public Rigidbody rigCatch;
+
     private void Update()
     {
         Turn();
@@ -33,6 +38,22 @@ public class Chicken : MonoBehaviour
         Catch();
     }
 
+
+    private void OnTriggerStay(Collider other)
+    {
+        print(other.name);
+        if (other.name == "雞腿"&& ani.GetCurrentAnimatorStateInfo(0).IsName("撿東西"))
+        {
+
+            Physics.IgnoreCollision(other,GetComponent<Collider>());
+
+            other.GetComponent<HingeJoint>().connectedBody = rigCatch;
+        }
+        if (other.name == "沙子" && ani.GetCurrentAnimatorStateInfo(0).IsName("撿東西"))
+        {
+            GameObject.Find("雞腿").GetComponent<HingeJoint>().connectedBody = null;
+        }
+    }
 
     #region 方法區域
     /// <summary>w
